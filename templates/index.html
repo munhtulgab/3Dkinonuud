@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Movie Platform — Кино худалдаж авах</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+</head>
+<body>
+
+    <!-- ═══════ NAVIGATION ═══════ -->
+    <nav class="nav">
+        <div class="nav__logo" onclick="location.href='/'">🎬 MOVIEBOX</div>
+        <div class="nav__actions" id="navActions">
+            <button class="btn btn--gold btn--sm" onclick="openModal('authModal')">Нэвтрэх</button>
+        </div>
+    </nav>
+
+    <!-- ═══════ MAIN CONTENT ═══════ -->
+    <main class="page-wrap">
+        <h1 class="section-title">🎬 ШИНЭ КИНОНУУД</h1>
+        <div class="movie-grid" id="movieGrid">
+            <div class="loading-screen" style="grid-column: 1/-1;">
+                <div class="spinner-lg"></div>
+                <span>Ачаалж байна...</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- ═══════ AUTH MODAL ═══════ -->
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal">
+            <div class="modal__header">
+                <div class="modal__title">НЭВТРЭХ</div>
+                <button class="modal__close" onclick="closeModal('authModal')">✕</button>
+            </div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">Нэвтрэх</div>
+                <div class="auth-tab" data-tab="register" onclick="switchAuthTab('register')">Бүртгүүлэх</div>
+            </div>
+
+            <div class="modal__body">
+                <!-- Login Form -->
+                <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Нэвтрэх нэр</label>
+                        <input type="text" class="input" id="loginUsername" placeholder="Нэвтрэх нэр" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label>Нууц үг</label>
+                        <input type="password" class="input" id="loginPassword" placeholder="Нууц үг" autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn--gold btn--lg" style="margin-top:8px;">Нэвтрэх</button>
+                </form>
+
+                <!-- Register Form -->
+                <form class="auth-form" id="registerForm" style="display:none;" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Нэвтрэх нэр</label>
+                        <input type="text" class="input" id="regUsername" placeholder="3-30 тэмдэгт" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label>И-мэйл</label>
+                        <input type="email" class="input" id="regEmail" placeholder="email@example.com" autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label>Нууц үг</label>
+                        <input type="password" class="input" id="regPassword" placeholder="6-аас дээш тэмдэгт" autocomplete="new-password">
+                    </div>
+                    <button type="submit" class="btn btn--gold btn--lg" style="margin-top:8px;">Бүртгүүлэх</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════ MOVIE DETAIL MODAL ═══════ -->
+    <div class="modal-backdrop" id="detailModal">
+        <div class="modal" style="max-width:600px;">
+            <div class="modal__header">
+                <div class="modal__title">КИНО ДЭЛГЭРЭНГҮЙ</div>
+                <button class="modal__close" onclick="closeModal('detailModal')">✕</button>
+            </div>
+            <div class="modal__body" id="detailBody">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════ NO POSTER PLACEHOLDER ═══════ -->
+    <svg style="display:none">
+        <symbol id="no-poster" viewBox="0 0 200 300">
+            <rect width="200" height="300" fill="#1a1a26"/>
+            <text x="100" y="150" text-anchor="middle" fill="#55556a" font-size="48">🎬</text>
+        </symbol>
+    </svg>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

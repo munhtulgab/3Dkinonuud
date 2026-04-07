@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚙️ Админ — Movie Platform</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+</head>
+<body>
+
+    <!-- ═══════ NAVIGATION ═══════ -->
+    <nav class="nav">
+        <div class="nav__logo" onclick="location.href='/'">🎬 MOVIEBOX</div>
+        <div class="nav__actions" id="navActions">
+            <a href="/" class="btn btn--outline btn--sm">← Нүүр хуудас</a>
+        </div>
+    </nav>
+
+    <!-- ═══════ ADMIN CONTENT ═══════ -->
+    <main class="page-wrap">
+        <h1 class="section-title">⚙️ АДМИН ПАНЕЛ</h1>
+
+        <div class="admin-panel">
+            <!-- ─── Зүүн: Кино нэмэх ─── -->
+            <div class="admin-card">
+                <div class="admin-card__title">📥 Кино нэмэх</div>
+
+                <!-- TMDB хайлт -->
+                <div class="form-group" style="margin-bottom:12px;">
+                    <label>TMDB-ээс хайх</label>
+                    <input type="text" class="input" id="tmdbSearchInput"
+                           placeholder="Кино нэр эсвэл ID..."
+                           oninput="onTMDBSearch(event)">
+                </div>
+                <div id="tmdbResults" style="max-height:200px;overflow-y:auto;margin-bottom:16px;"></div>
+
+                <!-- Нэмэх форм -->
+                <form onsubmit="handleAddMovie(event)">
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label>TMDB ID *</label>
+                        <input type="number" class="input" id="tmdbIdInput"
+                               placeholder="550" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label>Үнэ (MNT) *</label>
+                        <input type="number" class="input" id="priceInput"
+                               placeholder="5000" min="0" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom:16px;">
+                        <label>Татах линк (URL) *</label>
+                        <input type="url" class="input" id="downloadUrlInput"
+                               placeholder="https://example.com/movie.mp4" required>
+                    </div>
+                    <button type="submit" class="btn btn--gold" style="width:100%;">
+                        ➕ Кино нэмэх
+                    </button>
+                </form>
+            </div>
+
+            <!-- ─── Баруун: Кино жагсаалт ─── -->
+            <div class="admin-card">
+                <div class="admin-card__title">📋 Нэмсэн кинонууд</div>
+                <div id="adminMovieList">
+                    <div class="loading-screen">
+                        <div class="spinner-lg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ═══════ ЗАСАХ MODAL ═══════ -->
+    <div class="modal-backdrop" id="editModal">
+        <div class="modal" style="max-width:460px;">
+            <div class="modal__header">
+                <div class="modal__title" id="editModalTitle">КИНО ЗАСАХ</div>
+                <button class="modal__close" onclick="closeEditModal()">✕</button>
+            </div>
+            <div class="modal__body">
+                <form onsubmit="handleEditMovie(event)">
+                    <input type="hidden" id="editTmdbId">
+                    <div class="form-group" style="margin-bottom:14px;">
+                        <label>Кино нэр</label>
+                        <input type="text" class="input" id="editTitle" readonly
+                               style="opacity:0.6;cursor:not-allowed;">
+                    </div>
+                    <div class="form-group" style="margin-bottom:14px;">
+                        <label>Үнэ (MNT) *</label>
+                        <input type="number" class="input" id="editPrice"
+                               placeholder="5000" min="0" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom:20px;">
+                        <label>Татах линк (URL) *</label>
+                        <input type="url" class="input" id="editDownloadUrl"
+                               placeholder="https://example.com/movie.mp4" required>
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <button type="button" class="btn btn--outline" style="flex:1;"
+                                onclick="closeEditModal()">Болих</button>
+                        <button type="submit" class="btn btn--gold" style="flex:1;" id="editSubmitBtn">
+                            💾 Хадгалах
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- App JS (checkAuth, api, showToast, numberFormat functions needed) -->
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/admin.js"></script>
+</body>
+</html>
