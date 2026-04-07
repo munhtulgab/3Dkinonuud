@@ -17,9 +17,6 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-from database import Database
-from qpay_service import QPayService
-from tmdb_service import TMDBService
 from models import (
     MovieAddRequest, MovieUpdateRequest,
     UserRegisterRequest, UserLoginRequest,
@@ -33,9 +30,9 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 # ─── Глобал обьектууд ────────────────────────
-db: Database = None
-qpay: QPayService = None
-tmdb: TMDBService = None
+db = None
+qpay = None
+tmdb = None
 _initialized = False
 
 
@@ -45,6 +42,10 @@ async def get_services():
     if _initialized:
         return
     _initialized = True
+
+    from database import Database
+    from qpay_service import QPayService
+    from tmdb_service import TMDBService
 
     db = Database(
         mongo_uri=os.getenv("MONGO_URI", "mongodb://localhost:27017"),
