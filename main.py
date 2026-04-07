@@ -12,7 +12,6 @@ from datetime import datetime
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request, Depends, Query
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -92,9 +91,8 @@ async def init_middleware(request: Request, call_next):
     await get_services()
     return await call_next(request)
 
-# Static файлууд & Template
+# Template
 BASE_DIR = Path(__file__).parent
-app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 
