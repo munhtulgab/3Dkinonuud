@@ -162,12 +162,70 @@ function renderAdminMovies(container) {
                     ${m.is_active ? '' : ' • <span style="color:var(--red)">Идэвхгүй</span>'}
                 </span>
             </div>
-            <button class="btn btn--danger btn--sm" onclick="deleteMovie(${m.tmdb_id})" title="Устгах">
-                🗑
-            </button>
+            <div style="display:flex;gap:6px;">
+                <button class="btn btn--outline btn--sm" onclick="openEditModal(${m.tmdb_id})" title="Засах">
+                    ✏️
+                </button>
+                <button class="btn btn--danger btn--sm" onclick="deleteMovie(${m.tmdb_id})" title="Устгах">
+                    🗑
+                </button>
+            </div>
         </div>
     `).join('');
 }
+
+// ═══════════════════════════════════════════════
+//  КИНО ЗАСАХ MODAL
+// ═══════════════════════════════════════════════
+
+function openEditModal(tmdb_id) {
+    const movie = adminState.movies.find(m => m.tmdb_id === tmdb_id);
+    if (!movie) return;
+
+    document.getElementById('editTmdbId').value = movie.tmdb_id;
+    document.getElementById('editTitle').value = movie.title;
+    document.getElementById('editPrice').value = movie.price;
+    document.getElementById('editDownloadUrl').value = movie.download_url || '';
+    document.getElementById('editModalTitle').textContent = movie.title + ' — ЗАСАХ';
+    document.getElementById('editModal').classList.add('active');
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.remove('active');
+}
+
+async function handleEditMovie(e) {
+    e.preventDefault();
+
+    const tmdb_id = parseInt(document.getElementById('editTmdbId').value);
+    const price = parseInt(document.getElementById('editPrice').value);
+    const download_url = document.getElementById('editDownloadUrl').value.trim();
+
+    const btn = document.getElementById('editSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Хадгалж байна...';
+
+    try {
+        await api(`/api/admin/movies/${tmdb_id}`, {
+            method: 'PUT',
+            body: JSON.stringify({ price, download_url }),
+        });
+
+        showToast('Амжилттай хадгалагдлаа', 'success');
+        closeEditModal();
+        loadAdminMovies();
+    } catch (err) {
+        showToast(err.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '💾 Хадгалах';
+    }
+}
+
+// Modal-г гадна дарахад хаах
+document.getElementById('editModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+});
 
 async function deleteMovie(tmdb_id) {
     if (!confirm('Энэ киног устгах уу?')) return;
